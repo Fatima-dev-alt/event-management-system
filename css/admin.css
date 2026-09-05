@@ -1,0 +1,103 @@
+/* =========================================================
+   ADMIN PANEL STYLESHEET
+   Loaded AFTER style.css (reuses its theme variables).
+   ========================================================= */
+
+.admin-body { background: var(--bg); }
+
+/* ---------- LAYOUT ---------- */
+.admin-layout { display: flex; min-height: 100vh; }
+
+.admin-sidebar {
+  width: var(--sidebar-width); background: var(--surface); border-right: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; bottom: 0; display: flex; flex-direction: column;
+  z-index: 200; transition: transform 0.3s ease;
+}
+.admin-sidebar .logo { padding: 20px 22px; border-bottom: 1px solid var(--border); }
+.admin-nav { flex: 1; padding: 14px 12px; overflow-y: auto; }
+.admin-nav-link {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px; border-radius: var(--radius-sm);
+  color: var(--text-muted); font-weight: 600; margin-bottom: 4px; transition: var(--transition); font-size: 14px;
+}
+.admin-nav-link svg { width: 18px; height: 18px; flex-shrink: 0; }
+.admin-nav-link:hover { background: var(--surface-2); color: var(--text); }
+.admin-nav-link.active { background: var(--primary-light); color: var(--primary); font-weight: 700; }
+.admin-sidebar-footer { padding: 14px 12px; border-top: 1px solid var(--border); }
+
+.admin-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 150;
+}
+
+.admin-main { margin-left: var(--sidebar-width); flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.admin-topbar {
+  height: var(--topbar-height); background: var(--surface); border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 16px; padding: 0 24px; position: sticky; top: 0; z-index: 100;
+}
+.admin-hamburger { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; background: none; border: none; }
+.admin-hamburger svg { width: 22px; height: 22px; color: var(--text); }
+.admin-topbar-title { font-size: 17px; font-weight: 800; }
+.admin-topbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+.admin-content { padding: 24px; }
+
+/* ---------- STAT CARDS ---------- */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 22px; }
+.stat-card { padding: 20px; }
+.stat-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.stat-icon { width: 42px; height: 42px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; }
+.stat-icon svg { width: 20px; height: 20px; }
+.stat-icon.blue { background: var(--primary-light); color: var(--primary); }
+.stat-icon.green { background: var(--success-light); color: var(--success); }
+.stat-icon.orange { background: var(--warning-light); color: var(--warning); }
+.stat-icon.red { background: var(--danger-light); color: var(--danger); }
+.stat-icon.cyan { background: var(--info-light); color: var(--info); }
+.stat-value { font-size: 24px; font-weight: 800; margin-bottom: 2px; }
+.stat-label { font-size: 12px; color: var(--text-muted); }
+
+/* ---------- TOOLBAR (search/filter/sort above admin tables) ---------- */
+.admin-toolbar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 18px;
+}
+.admin-toolbar select, .admin-toolbar input[type="date"] {
+  padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); color: var(--text);
+}
+.admin-toolbar .nav-search { max-width: 220px; background: var(--surface-2); flex: 1; min-width: 180px; }
+
+/* ---------- REPORT (printable) ---------- */
+.report-header { text-align: center; margin-bottom: 24px; }
+.report-header h1 { font-size: 22px; font-weight: 800; }
+.report-header p { color: var(--text-muted); font-size: 13px; }
+.report-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.report-highlight { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.report-highlight:last-child { border-bottom: none; }
+
+@media print {
+  .admin-sidebar, .admin-topbar, .no-print { display: none !important; }
+  .admin-main { margin-left: 0 !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .card, .panel { border: 1px solid #ccc !important; box-shadow: none !important; }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1100px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .report-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .admin-sidebar { transform: translateX(-100%); }
+  .admin-sidebar.open { transform: translateX(0); }
+  .admin-overlay.open { display: block; }
+  .admin-main { margin-left: 0; }
+  .admin-hamburger { display: flex; }
+}
+
+@media (max-width: 640px) {
+  .admin-content { padding: 16px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .report-grid { grid-template-columns: 1fr; }
+  .admin-topbar { padding: 0 14px; }
+}
