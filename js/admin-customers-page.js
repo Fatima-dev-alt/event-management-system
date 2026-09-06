@@ -1,573 +1,140 @@
 /* =========================================================
-   ADMIN CUSTOMERS MANAGEMENT PAGE SCRIPT
+   ADMIN CUSTOMERS PAGE SCRIPT
    Loaded after data.js, ui.js, theme.js.
    ========================================================= */
 
-const ADMIN_CUSTOMER_PAGE_SIZE = 10;
+const ADMIN_CUST_PAGE_SIZE = 10;
+let adminCustPage = 1;
+let custSortField = "totalSpending";
+let custSortDir = "desc";
 
-let customerCurrentPage = 1;
-let customerSortField = "lastBooking";
-let customerSortDir = "desc";
-
-
-/* ---------- SIDEBAR ---------- */
-
-function initAdminCustomerSidebar() {
-
-  const sidebar =
-    document.getElementById("adminSidebar");
-
-  const overlay =
-    document.getElementById("adminOverlay");
-
-  const hamburger =
-    document.getElementById("adminHamburger");
-
-  if (!sidebar || !overlay || !hamburger) return;
-
+function initAdminSidebar() {
+  const sidebar = document.getElementById("adminSidebar");
+  const overlay = document.getElementById("adminOverlay");
+  const hamburger = document.getElementById("adminHamburger");
 
   hamburger.addEventListener("click", () => {
-
     sidebar.classList.toggle("open");
     overlay.classList.toggle("open");
-
   });
-
-
   overlay.addEventListener("click", () => {
-
     sidebar.classList.remove("open");
     overlay.classList.remove("open");
-
   });
 }
-
-
-/* ---------- ESCAPE HTML ---------- */
-
-function escapeCustomerHTML(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-/* ---------- FILTER + SORT ---------- */
 
 function getFilteredSortedCustomers() {
+  const search = document.getElementById("searchInput").value.trim().toLowerCase();
 
-  const searchInput =
-    document.getElementById("searchInput");
-
-  const search = searchInput
-    ? searchInput.value.trim().toLowerCase()
-    : "";
-
-
-  let customers = getCustomers().filter(customer => {
-
-    const name =
-      String(customer.name || "").toLowerCase();
-
-    const email =
-      String(customer.email || "").toLowerCase();
-
-    const phone =
-      String(customer.phone || "").toLowerCase();
-
-
-    return (
-      !search ||
-      name.includes(search) ||
-      email.includes(search) ||
-      phone.includes(search)
-    );
-
+  let list = getCustomers().filter(c => {
+    return !search || c.name.toLowerCase().includes(search) || c.email.toLowerCase().includes(search);
   });
 
-
-  customers.sort((a, b) => {
-
-    let valueA = a[customerSortField];
-    let valueB = b[customerSortField];
-
-
-    if (customerSortField === "lastBooking") {
-
-      valueA = new Date(valueA || 0).getTime();
-      valueB = new Date(valueB || 0).getTime();
-
-    }
-
-
-    if (
-      customerSortField === "totalBookings" ||
-      customerSortField === "totalSpending"
-    ) {
-
-      valueA = Number(valueA || 0);
-      valueB = Number(valueB || 0);
-
-    }
-
-
-    if (typeof valueA === "string") {
-      valueA = valueA.toLowerCase();
-    }
-
-    if (typeof valueB === "string") {
-      valueB = valueB.toLowerCase();
-    }
-
-
-    if (valueA < valueB) {
-
-      return customerSortDir === "asc"
-        ? -1
-        : 1;
-
-    }
-
-
-    if (valueA > valueB) {
-
-      return customerSortDir === "asc"
-        ? 1
-        : -1;
-
-    }
-
-
+  list.sort((a, b) => {
+    let valA = a[custSortField];
+    let valB = b[custSortField];
+    if (custSortField === "lastBooking") { valA = new Date(valA).getTime(); valB = new Date(valB).getTime(); }
+    if (typeof valA === "string") valA = valA.toLowerCase();
+    if (typeof valB === "string") valB = valB.toLowerCase();
+    if (valA < valB) return custSortDir === "asc" ? -1 : 1;
+    if (valA > valB) return custSortDir === "asc" ? 1 : -1;
     return 0;
-
   });
 
-
-  return customers;
+  return list;
 }
 
-
-/* ---------- CUSTOMER ROW ---------- */
-
 function customerRowHTML(customer) {
-
-  const name =
-    escapeCustomerHTML(
-      customer.name || "Unknown Customer"
-    );
-
-  const email =
-    escapeCustomerHTML(
-      customer.email || "—"
-    );
-
-  const phone =
-    escapeCustomerHTML(
-      customer.phone || "—"
-    );
-
-  const totalBookings =
-    Number(customer.totalBookings || 0);
-
-  const totalSpending =
-    Number(customer.totalSpending || 0);
-
-  const lastBooking =
-    customer.lastBooking
-      ? formatDateTime(customer.lastBooking)
-      : "—";
-
-
   return `
     <tr>
-
-      <td>
-
-        <div class="customer-name">
-          ${name}
-        </div>
-
-        <span class="customer-email">
-          ${email}
-        </span>
-
-      </td>
-
-
-      <td>
-
-        <span class="customer-phone">
-          ${phone}
-        </span>
-
-      </td>
-
-
-      <td>
-
-        <span class="customer-number">
-          ${totalBookings}
-        </span>
-
-      </td>
-
-
-      <td>
-
-        <span class="customer-spending">
-          ${formatCurrency(totalSpending)}
-        </span>
-
-      </td>
-
-
-      <td>
-        ${lastBooking}
-      </td>
-
+      <td style="font-weight:700;">${customer.name}</td>
+      <td>${customer.email}</td>
+      <td>${customer.phone}</td>
+      <td>${customer.totalBookings}</td>
+      <td>${formatCurrency(customer.totalSpending)}</td>
+      <td>${formatDateTime(customer.lastBooking)}</td>
     </tr>
   `;
 }
 
-
-/* ---------- RENDER TABLE ---------- */
-
 function renderCustomersTable() {
+  const filtered = getFilteredSortedCustomers();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / ADMIN_CUST_PAGE_SIZE));
+  if (adminCustPage > totalPages) adminCustPage = totalPages;
 
-  const customers =
-    getFilteredSortedCustomers();
+  const start = (adminCustPage - 1) * ADMIN_CUST_PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + ADMIN_CUST_PAGE_SIZE);
 
-  const totalItems =
-    customers.length;
+  document.getElementById("filtersCount").textContent = `Showing ${filtered.length} of ${getCustomers().length} customers`;
 
-
-  const totalPages =
-    Math.max(
-      1,
-      Math.ceil(
-        totalItems / ADMIN_CUSTOMER_PAGE_SIZE
-      )
-    );
-
-
-  if (customerCurrentPage > totalPages) {
-    customerCurrentPage = totalPages;
-  }
-
-
-  const start =
-    (customerCurrentPage - 1) *
-    ADMIN_CUSTOMER_PAGE_SIZE;
-
-
-  const pageItems =
-    customers.slice(
-      start,
-      start + ADMIN_CUSTOMER_PAGE_SIZE
-    );
-
-
-  const body =
-    document.getElementById(
-      "customersTableBody"
-    );
-
-
-  if (!body) return;
-
-
+  const body = document.getElementById("customersTableBody");
   body.innerHTML = pageItems.length
+    ? pageItems.map(customerRowHTML).join("")
+    : `<tr><td colspan="6" style="text-align:center; color:var(--text-muted); padding:30px;">No customers found.</td></tr>`;
 
-    ? pageItems
-        .map(customerRowHTML)
-        .join("")
-
-    : `
-      <tr>
-
-        <td
-          colspan="5"
-          style="
-            text-align:center;
-            color:var(--text-muted);
-            padding:40px;
-          "
-        >
-          No customers found.
-        </td>
-
-      </tr>
-    `;
-
-
-  const count =
-    document.getElementById("customerCount");
-
-
-  if (count) {
-
-    count.textContent =
-      `${totalItems} customer${
-        totalItems === 1 ? "" : "s"
-      }`;
-
-  }
-
-
-  renderCustomerPagination(totalItems);
-
-  updateCustomerSortArrows();
+  renderPagination(filtered.length);
+  updateSortArrows();
 }
 
-
-/* ---------- PAGINATION ---------- */
-
-function renderCustomerPagination(totalItems) {
-
-  const totalPages =
-    Math.max(
-      1,
-      Math.ceil(
-        totalItems / ADMIN_CUSTOMER_PAGE_SIZE
-      )
-    );
-
-
-  const container =
-    document.getElementById("pagination");
-
-
-  if (!container) return;
-
+function renderPagination(totalItems) {
+  const totalPages = Math.max(1, Math.ceil(totalItems / ADMIN_CUST_PAGE_SIZE));
+  const container = document.getElementById("pagination");
 
   if (totalPages <= 1) {
-
     container.innerHTML = "";
-
     return;
   }
 
-
-  let html = `
-    <button
-      class="page-btn"
-      data-page="prev"
-      ${customerCurrentPage === 1 ? "disabled" : ""}
-    >
-      &laquo;
-    </button>
-  `;
-
-
+  let html = `<button class="page-btn" data-page="prev" ${adminCustPage === 1 ? "disabled" : ""}>&laquo;</button>`;
   for (let i = 1; i <= totalPages; i++) {
-
-    html += `
-      <button
-        class="page-btn ${
-          i === customerCurrentPage
-            ? "active"
-            : ""
-        }"
-        data-page="${i}"
-      >
-        ${i}
-      </button>
-    `;
-
+    html += `<button class="page-btn ${i === adminCustPage ? "active" : ""}" data-page="${i}">${i}</button>`;
   }
-
-
-  html += `
-    <button
-      class="page-btn"
-      data-page="next"
-      ${
-        customerCurrentPage === totalPages
-          ? "disabled"
-          : ""
-      }
-    >
-      &raquo;
-    </button>
-  `;
-
-
+  html += `<button class="page-btn" data-page="next" ${adminCustPage === totalPages ? "disabled" : ""}>&raquo;</button>`;
   container.innerHTML = html;
 
-
-  container
-    .querySelectorAll(".page-btn")
-    .forEach(button => {
-
-      button.addEventListener("click", () => {
-
-        const value =
-          button.dataset.page;
-
-
-        if (value === "prev") {
-
-          customerCurrentPage =
-            Math.max(
-              1,
-              customerCurrentPage - 1
-            );
-
-        } else if (value === "next") {
-
-          customerCurrentPage =
-            Math.min(
-              totalPages,
-              customerCurrentPage + 1
-            );
-
-        } else {
-
-          customerCurrentPage =
-            Number(value);
-
-        }
-
-
-        renderCustomersTable();
-
-      });
-
+  container.querySelectorAll(".page-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const val = btn.dataset.page;
+      if (val === "prev") adminCustPage = Math.max(1, adminCustPage - 1);
+      else if (val === "next") adminCustPage = Math.min(totalPages, adminCustPage + 1);
+      else adminCustPage = Number(val);
+      renderCustomersTable();
     });
-}
-
-
-/* ---------- SORT ARROWS ---------- */
-
-function updateCustomerSortArrows() {
-
-  document
-    .querySelectorAll("th[data-sort]")
-    .forEach(th => {
-
-      const arrow =
-        th.querySelector(".sort-arrow");
-
-
-      if (!arrow) return;
-
-
-      th.classList.toggle(
-        "sorted",
-        th.dataset.sort === customerSortField
-      );
-
-
-      if (
-        th.dataset.sort === customerSortField
-      ) {
-
-        arrow.innerHTML =
-          customerSortDir === "asc"
-            ? "&#9652;"
-            : "&#9662;";
-
-      } else {
-
-        arrow.innerHTML =
-          "&#9662;";
-
-      }
-
-    });
-}
-
-
-/* ---------- SORT HEADERS ---------- */
-
-function initCustomerSortHeaders() {
-
-  document
-    .querySelectorAll("th[data-sort]")
-    .forEach(th => {
-
-      th.addEventListener("click", () => {
-
-        const field =
-          th.dataset.sort;
-
-
-        if (
-          customerSortField === field
-        ) {
-
-          customerSortDir =
-            customerSortDir === "asc"
-              ? "desc"
-              : "asc";
-
-        } else {
-
-          customerSortField = field;
-          customerSortDir = "asc";
-
-        }
-
-
-        customerCurrentPage = 1;
-
-        renderCustomersTable();
-
-      });
-
-    });
-}
-
-
-/* ---------- SEARCH ---------- */
-
-function initCustomerSearch() {
-
-  const search =
-    document.getElementById(
-      "searchInput"
-    );
-
-
-  if (!search) return;
-
-
-  search.addEventListener("input", () => {
-
-    customerCurrentPage = 1;
-
-    renderCustomersTable();
-
   });
 }
 
+function updateSortArrows() {
+  document.querySelectorAll("th[data-sort]").forEach(th => {
+    th.classList.toggle("sorted", th.dataset.sort === custSortField);
+    const arrow = th.querySelector(".sort-arrow");
+    if (th.dataset.sort === custSortField) {
+      arrow.innerHTML = custSortDir === "asc" ? "&#9652;" : "&#9662;";
+    } else {
+      arrow.innerHTML = "&#9662;";
+    }
+  });
+}
 
-/* ---------- INITIALIZE ---------- */
+function initSortHeaders() {
+  document.querySelectorAll("th[data-sort]").forEach(th => {
+    th.addEventListener("click", () => {
+      const field = th.dataset.sort;
+      if (custSortField === field) custSortDir = custSortDir === "asc" ? "desc" : "asc";
+      else { custSortField = field; custSortDir = "asc"; }
+      renderCustomersTable();
+    });
+  });
+}
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
+function initFilters() {
+  document.getElementById("searchInput").addEventListener("input", () => { adminCustPage = 1; renderCustomersTable(); });
+}
 
-    initEventsData();
+document.addEventListener("DOMContentLoaded", () => {
+  initEventsData();
+  initAdminSidebar();
+  initFilters();
+  initSortHeaders();
+  renderCustomersTable();
+});
 
-    /*
-      Customers are rebuilt from bookings so that
-      the Customers page always reflects the latest
-      booking information.
-    */
-    rebuildCustomersFromBookings();
-
-    initAdminCustomerSidebar();
-
-    initCustomerSearch();
-
-    initCustomerSortHeaders();
-
-    renderCustomersTable();
-
-  }
-);
