@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Eventify Admin - Events Management">
+  <title>Manage Events - Eventify Admin</title>
+
+  <!-- Main Design System -->
+  <link rel="stylesheet" href="../css/style.css">
+
+  <!-- Admin Panel Styles -->
+  <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body class="admin-body">
+
+  <div class="admin-layout">
+
+    <!-- =====================================================
+         ADMIN SIDEBAR
+         ===================================================== -->
+    <aside class="admin-sidebar" id="adminSidebar">
+
+      <div class="logo">
+        <a href="../index.html" aria-label="Eventify Home">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+            <path d="M16 2v4M8 2v4M3 10h18"></path>
+            <path d="M8 14h2M14 14h2M8 17h2M14 17h2"></path>
+          </svg>
+          Eventify
+        </a>
+      </div>
+
+      <nav class="admin-nav" aria-label="Admin navigation">
+
+        <a href="dashboard.html" class="admin-nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+
+        <a href="events.html" class="admin-nav-link active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+            <path d="M16 2v4M8 2v4M3 10h18"></path>
+            <path d="M8 14h2M14 14h2M8 17h2"></path>
+          </svg>
+          <span>Events</span>
+        </a>
+
+        <a href="bookings.html" class="admin-nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 5h16v14H4z"></path>
+            <path d="M8 9h8M8 13h6"></path>
+          </svg>
+          <span>Bookings</span>
+        </a>
+
+        <a href="customers.html" class="admin-nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span>Customers</span>
+        </a>
+
+        <a href="reports.html" class="admin-nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19V5"></path>
+            <path d="M4 19h17"></path>
+            <rect x="7" y="12" width="3" height="4"></rect>
+            <rect x="12" y="9" width="3" height="7"></rect>
+            <rect x="17" y="6" width="3" height="10"></rect>
+          </svg>
+          <span>Reports</span>
+        </a>
+
+        <a href="settings.html" class="admin-nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.46 15a1.7 1.7 0 0 0-1.56-1.03H6v-2.4h.9a1.7 1.7 0 0 0 1.56-1.03 1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.73 5.7V5h2.4v.7a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03h.7v2.4h-.7A1.7 1.7 0 0 0 19.4 15z"></path>
+          </svg>
+          <span>Settings</span>
+        </a>
+
+      </nav>
+
+      <div class="admin-sidebar-footer">
+        <a href="../index.html" class="admin-nav-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"></path>
+            <path d="M9 12h12"></path>
+          </svg>
+          <span>Back to Website</span>
+        </a>
+      </div>
+
+    </aside>
+
+
+    <!-- Sidebar overlay for mobile -->
+    <div class="admin-overlay" id="adminOverlay"></div>
+
+
+    <!-- =====================================================
+         MAIN ADMIN AREA
+         ===================================================== -->
+    <main class="admin-main">
+
+      <!-- ---------- TOPBAR ---------- -->
+      <header class="admin-topbar">
+
+        <button
+          class="admin-hamburger"
+          id="adminHamburger"
+          type="button"
+          aria-label="Open navigation"
+          aria-controls="adminSidebar"
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="admin-topbar-title">
+          Events Management
+        </div>
+
+        <div class="admin-topbar-right">
+
+          <button
+            class="theme-toggle admin-theme-button"
+            type="button"
+            aria-label="Toggle dark mode"
+            title="Toggle dark mode"
+          >
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+            </svg>
+
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+
+          <div class="admin-topbar-user">
+
+            <div class="admin-user-avatar">
+              AD
+            </div>
+
+            <div class="admin-topbar-user-info">
+              <strong>Admin</strong>
+              <span>Administrator</span>
+            </div>
+
+          </div>
+
+        </div>
+
+      </header>
+
+
+      <!-- ---------- PAGE CONTENT ---------- -->
+      <div class="admin-content">
+
+        <div class="section-head">
+          <div>
+            <h1 class="section-title">Events</h1>
+            <p class="section-subtitle">
+              Create, update, manage, and monitor all events.
+            </p>
+          </div>
+
+          <button class="btn btn-primary" id="addEventBtn" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Add Event
+          </button>
+        </div>
+
+
+        <!-- ---------- FILTER / SEARCH TOOLBAR ---------- -->
+        <div class="admin-toolbar">
+
+          <div class="nav-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+            </svg>
+
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search events..."
+              autocomplete="off"
+              aria-label="Search events"
+            >
+          </div>
+
+          <select id="categoryFilter" aria-label="Filter by category">
+            <option value="all">All Categories</option>
+          </select>
+
+          <select id="statusFilter" aria-label="Filter by status">
+            <option value="all">All Statuses</option>
+            <option value="Upcoming">Upcoming</option>
+            <option value="Ongoing">Ongoing</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+
+        </div>
+
+
+        <!-- ---------- EVENTS TABLE ---------- -->
+        <div class="panel">
+
+          <div class="panel-header">
+            <h3>All Events</h3>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+
+                  <th data-sort="name">
+                    Event
+                    <span class="sort-arrow">&#9662;</span>
+                  </th>
+
+                  <th data-sort="category">
+                    Category
+                    <span class="sort-arrow">&#9662;</span>
+                  </th>
+
+                  <th data-sort="date">
+                    Date
+                    <span class="sort-arrow">&#9662;</span>
+                  </th>
+
+                  <th data-sort="price">
+                    Price
+                    <span class="sort-arrow">&#9662;</span>
+                  </th>
+
+                  <th>
+                    Seats
+                  </th>
+
+                  <th data-sort="status">
+                    Status
+                    <span class="sort-arrow">&#9662;</span>
+                  </th>
+
+                  <th>
+                    Actions
+                  </th>
+
+                </tr>
+              </thead>
+
+              <tbody id="eventsTableBody">
+                <!-- JavaScript renders event rows here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination generated by JavaScript -->
+          <div class="pagination" id="pagination"></div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- =====================================================
+       SCRIPTS
+       Order is important:
+       data.js -> ui.js -> theme.js -> page script
+       ===================================================== -->
+
+  <script src="../js/data.js"></script>
+  <script src="../js/ui.js"></script>
+  <script src="../js/theme.js"></script>
+  <script src="../js/admin-events-page.js"></script>
+
+</body>
+</html>
