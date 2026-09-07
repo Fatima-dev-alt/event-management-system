@@ -253,7 +253,7 @@ button { cursor: pointer; }
   background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
 }
-.panel { padding: 22px; }
+.panel { padding: 22px; min-width: 0; }
 .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
 .panel-header h3 { font-size: 16px; font-weight: 800; }
 
