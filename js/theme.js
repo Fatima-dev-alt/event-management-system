@@ -31,6 +31,14 @@ function initThemeToggleButtons() {
     btn.addEventListener("click", toggleTheme);
   });
 }
+function initMobileNav() {
+  const toggle = document.getElementById("navMenuToggle");
+  const links = document.getElementById("navLinks");
+  if (!toggle || !links) return;
+  toggle.addEventListener("click", () => {
+    links.classList.toggle("open");
+  });
+}
 
 /* ---------- KEYBOARD SHORTCUTS ---------- */
 function initKeyboardShortcuts() {
@@ -67,5 +75,6 @@ initTheme();
 
 document.addEventListener("DOMContentLoaded", () => {
   initThemeToggleButtons();
+  initMobileNav();
   initKeyboardShortcuts();
 });
