@@ -1,710 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <meta
-    name="description"
-    content="Admin Dashboard for the Advanced Event Management System"
-  >
-
-  <title>Admin Dashboard | Event Management System</title>
-
-  <!-- Shared Design System -->
-  <link rel="stylesheet" href="../css/style.css">
-
-  <!-- Admin Panel -->
-  <link rel="stylesheet" href="../css/admin.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Admin Dashboard | Eventify</title>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
 </head>
-
 <body class="admin-body">
 
-  <!-- =========================================
-       ADMIN LAYOUT
-  ========================================== -->
-  <div class="admin-layout">
+<div class="admin-layout">
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Eventify Admin
+    </div>
+    <nav class="admin-nav">
+      <a href="dashboard.html" class="admin-nav-link active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+        Dashboard
+      </a>
+      <a href="events.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Events
+      </a>
+      <a href="bookings.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l1.5 4h9L18 2"/><path d="M3.5 6h17l-1.6 12.5a2 2 0 0 1-2 1.5H7.1a2 2 0 0 1-2-1.5L3.5 6z"/></svg>
+        Bookings
+      </a>
+      <a href="customers.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Customers
+      </a>
+      <a href="reports.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-3"/></svg>
+        Reports
+      </a>
+      <a href="settings.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Settings
+      </a>
+    </nav>
+    <div class="admin-sidebar-footer">
+      <a href="../index.html" class="admin-nav-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Back to Site
+      </a>
+    </div>
+  </aside>
 
-    <!-- Mobile Overlay -->
-    <div
-      class="admin-overlay"
-      id="adminOverlay"
-      aria-hidden="true"
-    ></div>
+  <div class="admin-overlay" id="adminOverlay"></div>
 
-
-    <!-- =========================================
-         SIDEBAR
-    ========================================== -->
-    <aside
-      class="admin-sidebar"
-      id="adminSidebar"
-      aria-label="Admin navigation"
-    >
-
-      <!-- Logo -->
-      <div class="logo">
-        <a href="dashboard.html" class="brand">
-          <span class="brand-mark">E</span>
-          <span class="brand-text">
-            Event<span>Hub</span>
-          </span>
-        </a>
-      </div>
-
-
-      <!-- Navigation -->
-      <nav class="admin-nav">
-
-        <a
-          href="dashboard.html"
-          class="admin-nav-link active"
-          aria-current="page"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="3" width="7" height="7"></rect>
-            <rect x="14" y="3" width="7" height="7"></rect>
-            <rect x="3" y="14" width="7" height="7"></rect>
-            <rect x="14" y="14" width="7" height="7"></rect>
-          </svg>
-          <span>Dashboard</span>
-        </a>
-
-
-        <a
-          href="events.html"
-          class="admin-nav-link"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          <span>Events</span>
-        </a>
-
-
-        <a
-          href="bookings.html"
-          class="admin-nav-link"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 4h16v16H4z"></path>
-            <line x1="8" y1="8" x2="16" y2="8"></line>
-            <line x1="8" y1="12" x2="16" y2="12"></line>
-            <line x1="8" y1="16" x2="13" y2="16"></line>
-          </svg>
-          <span>Bookings</span>
-        </a>
-
-
-        <a
-          href="customers.html"
-          class="admin-nav-link"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="8" r="4"></circle>
-            <path d="M4 21a8 8 0 0 1 16 0"></path>
-          </svg>
-          <span>Customers</span>
-        </a>
-
-
-        <a
-          href="reports.html"
-          class="admin-nav-link"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="4" y1="19" x2="4" y2="10"></line>
-            <line x1="10" y1="19" x2="10" y2="5"></line>
-            <line x1="16" y1="19" x2="16" y2="8"></line>
-            <line x1="22" y1="19" x2="22" y2="3"></line>
-          </svg>
-          <span>Reports</span>
-        </a>
-
-
-        <a
-          href="settings.html"
-          class="admin-nav-link"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.4 1.4-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5v.2h-2v-.2a1.7 1.7 0 0 0-1-1.5 1.7 1.7 0 0 0-1.9.3l-.1.1L8 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H6v-2h.2a1.7 1.7 0 0 0 1.5-1 1.7 1.7 0 0 0-.3-1.9L7.3 9 8.7 7.6l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.5v-.2h2v.2a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1L18 9l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.5 1h.2v2h-.2a1.7 1.7 0 0 0-1.7 1z"></path>
-          </svg>
-          <span>Settings</span>
-        </a>
-
-      </nav>
-
-
-      <!-- Sidebar Footer -->
-      <div class="admin-sidebar-footer">
-
-        <div class="admin-user-mini">
-
-          <div class="admin-user-avatar">
-            A
-          </div>
-
-          <div>
-            <strong>Administrator</strong>
-            <span>Admin Panel</span>
-          </div>
-
-        </div>
-
-      </div>
-
-    </aside>
-
-
-    <!-- =========================================
-         MAIN
-    ========================================== -->
-    <main class="admin-main">
-
-      <!-- Topbar -->
-      <header class="admin-topbar">
-
-        <button
-          type="button"
-          class="admin-hamburger"
-          id="adminHamburger"
-          aria-label="Open navigation"
-          aria-expanded="false"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="4" y1="6" x2="20" y2="6"></line>
-            <line x1="4" y1="12" x2="20" y2="12"></line>
-            <line x1="4" y1="18" x2="20" y2="18"></line>
-          </svg>
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <button class="admin-hamburger" id="adminHamburger" aria-label="Menu" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="admin-topbar-title">Dashboard</div>
+      <div class="admin-topbar-right">
+        <button class="theme-toggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
-
-
-        <div class="admin-topbar-title">
-          Dashboard
-        </div>
-
-
-        <div class="admin-topbar-right">
-
-          <button
-            type="button"
-            class="theme-toggle admin-theme-button"
-            aria-label="Toggle dark mode"
-            title="Toggle dark mode"
-          >
-            <svg
-              class="theme-icon"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="12" cy="12" r="4"></circle>
-              <path d="M12 2v2"></path>
-              <path d="M12 20v2"></path>
-              <path d="M4.93 4.93l1.42 1.42"></path>
-              <path d="M17.65 17.65l1.42 1.42"></path>
-              <path d="M2 12h2"></path>
-              <path d="M20 12h2"></path>
-              <path d="M4.93 19.07l1.42-1.42"></path>
-              <path d="M17.65 6.35l1.42-1.42"></path>
-            </svg>
-          </button>
-
-
-          <div class="admin-topbar-user">
-
-            <div class="admin-user-avatar">
-              A
-            </div>
-
-            <div class="admin-topbar-user-info">
-              <strong>Administrator</strong>
-              <span>Admin</span>
-            </div>
-
-          </div>
-
-        </div>
-
-      </header>
-
-
-      <!-- =========================================
-           CONTENT
-      ========================================== -->
-      <div class="admin-content">
-
-        <!-- Page Heading -->
-        <div class="dashboard-heading">
-
-          <div>
-            <p class="dashboard-eyebrow">
-              OVERVIEW
-            </p>
-
-            <h1>Welcome back, Administrator</h1>
-
-            <p>
-              Here's a quick overview of your event management system.
-            </p>
-          </div>
-
-          <div
-            class="dashboard-date"
-            id="dashboardDate"
-          >
-            --
-          </div>
-
-        </div>
-
-
-        <!-- =====================================
-             STATISTICS
-        ====================================== -->
-        <section
-          class="stats-grid dashboard-stats"
-          aria-label="Dashboard statistics"
-        >
-
-          <!-- Total Events -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon blue">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <rect x="3" y="4" width="18" height="17" rx="2"></rect>
-                  <line x1="16" y1="2" x2="16" y2="6"></line>
-                  <line x1="8" y1="2" x2="8" y2="6"></line>
-                  <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-              </div>
-
-              <span class="stat-trend neutral">
-                Live
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="totalEvents">
-              0
-            </div>
-
-            <div class="stat-label">
-              Total Events
-            </div>
-
-          </article>
-
-
-          <!-- Total Bookings -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon green">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16v16H4z"></path>
-                  <line x1="8" y1="8" x2="16" y2="8"></line>
-                  <line x1="8" y1="12" x2="16" y2="12"></line>
-                  <line x1="8" y1="16" x2="13" y2="16"></line>
-                </svg>
-              </div>
-
-              <span class="stat-trend positive">
-                Live
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="totalBookings">
-              0
-            </div>
-
-            <div class="stat-label">
-              Total Bookings
-            </div>
-
-          </article>
-
-
-          <!-- Total Customers -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon cyan">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="8" r="4"></circle>
-                  <path d="M4 21a8 8 0 0 1 16 0"></path>
-                </svg>
-              </div>
-
-              <span class="stat-trend neutral">
-                Live
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="totalCustomers">
-              0
-            </div>
-
-            <div class="stat-label">
-              Total Customers
-            </div>
-
-          </article>
-
-
-          <!-- Revenue -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon orange">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M12 7v10"></path>
-                  <path d="M15 9.5c0-1.1-1.3-2-3-2s-3 .9-3 2 1.3 2 3 2 3 .9 3 2-1.3 2-3 2-3-.9-3-2"></path>
-                </svg>
-              </div>
-
-              <span class="stat-trend positive">
-                Confirmed
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="totalRevenue">
-              $0.00
-            </div>
-
-            <div class="stat-label">
-              Total Revenue
-            </div>
-
-          </article>
-
-
-          <!-- Sold Tickets -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon blue">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 7a3 3 0 0 0 0 6 3 3 0 0 0 0 6h16V7H4z"></path>
-                  <path d="M13 7v12"></path>
-                </svg>
-              </div>
-
-              <span class="stat-trend neutral">
-                Tickets
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="soldTickets">
-              0
-            </div>
-
-            <div class="stat-label">
-              Sold Tickets
-            </div>
-
-          </article>
-
-
-          <!-- Available Seats -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon green">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <path d="M8 12l2.5 2.5L16 9"></path>
-                </svg>
-              </div>
-
-              <span class="stat-trend positive">
-                Available
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="availableSeats">
-              0
-            </div>
-
-            <div class="stat-label">
-              Available Seats
-            </div>
-
-          </article>
-
-
-          <!-- Cancelled Bookings -->
-          <article class="card stat-card dashboard-stat-card">
-
-            <div class="stat-card-top">
-
-              <div class="stat-icon red">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="9"></circle>
-                  <line x1="9" y1="9" x2="15" y2="15"></line>
-                  <line x1="15" y1="9" x2="9" y2="15"></line>
-                </svg>
-              </div>
-
-              <span class="stat-trend negative">
-                Cancelled
-              </span>
-
-            </div>
-
-            <div class="stat-value" id="cancelledBookings">
-              0
-            </div>
-
-            <div class="stat-label">
-              Cancelled Bookings
-            </div>
-
-          </article>
-
-        </section>
-
-
-        <!-- =====================================
-             LOWER DASHBOARD
-        ====================================== -->
-        <section class="dashboard-columns">
-
-
-          <!-- Recent Bookings -->
-          <article class="card dashboard-panel">
-
-            <div class="dashboard-panel-header">
-
-              <div>
-                <p class="dashboard-section-label">
-                  ACTIVITY
-                </p>
-
-                <h2>Recent Bookings</h2>
-              </div>
-
-              <a
-                href="bookings.html"
-                class="dashboard-view-all"
-              >
-                View All
-                <span>→</span>
-              </a>
-
-            </div>
-
-
-            <div class="dashboard-table-wrapper">
-
-              <table class="dashboard-table">
-
-                <thead>
-                  <tr>
-                    <th>Booking</th>
-                    <th>Customer</th>
-                    <th>Event</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-
-                <tbody id="recentBookingsBody">
-
-                  <tr>
-                    <td colspan="5">
-                      <div class="dashboard-empty">
-                        Loading bookings...
-                      </div>
-                    </td>
-                  </tr>
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          </article>
-
-
-          <!-- Event Overview -->
-          <article class="card dashboard-panel">
-
-            <div class="dashboard-panel-header">
-
-              <div>
-                <p class="dashboard-section-label">
-                  EVENTS
-                </p>
-
-                <h2>Event Overview</h2>
-              </div>
-
-              <a
-                href="events.html"
-                class="dashboard-view-all"
-              >
-                Manage
-                <span>→</span>
-              </a>
-
-            </div>
-
-
-            <div
-              class="event-status-list"
-              id="eventStatusList"
-            >
-              <div class="dashboard-empty">
-                Loading event status...
-              </div>
-            </div>
-
-          </article>
-
-        </section>
-
-
-        <!-- =====================================
-             QUICK ACTIONS
-        ====================================== -->
-        <section class="card dashboard-panel quick-actions-panel">
-
-          <div class="dashboard-panel-header">
-
-            <div>
-              <p class="dashboard-section-label">
-                QUICK ACTIONS
-              </p>
-
-              <h2>Manage Your System</h2>
-            </div>
-
-          </div>
-
-
-          <div class="quick-actions-grid">
-
-            <a
-              href="events.html"
-              class="quick-action"
-            >
-              <div class="quick-action-icon">
-                +
-              </div>
-
-              <div>
-                <strong>Add / Manage Events</strong>
-                <span>Create and manage events</span>
-              </div>
-
-              <span class="quick-action-arrow">
-                →
-              </span>
-            </a>
-
-
-            <a
-              href="bookings.html"
-              class="quick-action"
-            >
-              <div class="quick-action-icon">
-                ▤
-              </div>
-
-              <div>
-                <strong>Manage Bookings</strong>
-                <span>View and update bookings</span>
-              </div>
-
-              <span class="quick-action-arrow">
-                →
-              </span>
-            </a>
-
-
-            <a
-              href="customers.html"
-              class="quick-action"
-            >
-              <div class="quick-action-icon">
-                ♙
-              </div>
-
-              <div>
-                <strong>Customers</strong>
-                <span>View customer information</span>
-              </div>
-
-              <span class="quick-action-arrow">
-                →
-              </span>
-            </a>
-
-
-            <a
-              href="reports.html"
-              class="quick-action"
-            >
-              <div class="quick-action-icon">
-                ◩
-              </div>
-
-              <div>
-                <strong>Reports</strong>
-                <span>Analyze system performance</span>
-              </div>
-
-              <span class="quick-action-arrow">
-                →
-              </span>
-            </a>
-
-          </div>
-
-        </section>
-
       </div>
+    </header>
 
-    </main>
+    <div class="admin-content">
+      <div class="stats-grid" id="statsGrid"></div>
 
+      <div class="panel">
+        <div class="panel-header"><h3>Recent Bookings</h3><a href="bookings.html" class="btn btn-outline btn-sm">View All</a></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Booking ID</th><th>Customer</th><th>Event</th><th>Amount</th><th>Status</th></tr>
+            </thead>
+            <tbody id="recentBookingsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
+</div>
 
-
-  <!-- =========================================
-       SCRIPTS
-  ========================================== -->
-
-  <!-- Step 1 shared data layer -->
-  <script src="../js/data.js"></script>
-
-  <!-- Shared UI -->
-  <script src="../js/ui.js"></script>
-
-  <!-- Shared theme -->
-  <script src="../js/theme.js"></script>
-
-  <!-- Step 9 dashboard -->
-  <script src="../js/admin-dashboard-page.js"></script>
-
+<script src="../js/data.js"></script>
+<script src="../js/ui.js"></script>
+<script src="../js/theme.js"></script>
+<script src="../js/admin-dashboard-page.js"></script>
 </body>
 </html>
