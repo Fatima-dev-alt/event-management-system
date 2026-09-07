@@ -1,517 +1,120 @@
 /* =========================================================
-   ADMIN DASHBOARD
-   Advanced Event Management System
-   Step 9
+   ADMIN DASHBOARD PAGE SCRIPT
+   Loaded after data.js, ui.js, theme.js.
    ========================================================= */
 
-(function () {
-  "use strict";
+function initAdminSidebar() {
+  const sidebar = document.getElementById("adminSidebar");
+  const overlay = document.getElementById("adminOverlay");
+  const hamburger = document.getElementById("adminHamburger");
 
-  /* ---------- DOM ---------- */
-
-  const totalEventsEl = document.getElementById("totalEvents");
-  const totalBookingsEl = document.getElementById("totalBookings");
-  const totalCustomersEl = document.getElementById("totalCustomers");
-  const totalRevenueEl = document.getElementById("totalRevenue");
-  const soldTicketsEl = document.getElementById("soldTickets");
-  const availableSeatsEl = document.getElementById("availableSeats");
-  const cancelledBookingsEl = document.getElementById("cancelledBookings");
-
-  const recentBookingsBody =
-    document.getElementById("recentBookingsBody");
-
-  const eventStatusList =
-    document.getElementById("eventStatusList");
-
-  const dashboardDate =
-    document.getElementById("dashboardDate");
-
-  const sidebar =
-    document.getElementById("adminSidebar");
-
-  const overlay =
-    document.getElementById("adminOverlay");
-
-  const hamburger =
-    document.getElementById("adminHamburger");
-
-
-  /* ---------- INITIALIZE ---------- */
-
-  document.addEventListener("DOMContentLoaded", function () {
-    initEventsData();
-    initDashboard();
-    initAdminNavigation();
+  hamburger.addEventListener("click", () => {
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("open");
   });
-
-
-  function initDashboard() {
-    renderCurrentDate();
-    renderStatistics();
-    renderRecentBookings();
-    renderEventOverview();
-  }
-
-
-  /* =====================================================
-     STATISTICS
-     ====================================================== */
-
-  function renderStatistics() {
-    const events = getEvents();
-    const bookings = getBookings();
-    const customers = getCustomers();
-
-    const confirmedBookings = bookings.filter(function (booking) {
-      return booking.status === "Confirmed";
-    });
-
-    const cancelledBookings = bookings.filter(function (booking) {
-      return booking.status === "Cancelled";
-    });
-
-
-    /* Total events */
-    totalEventsEl.textContent =
-      formatNumber(events.length);
-
-
-    /* Total bookings */
-    totalBookingsEl.textContent =
-      formatNumber(bookings.length);
-
-
-    /* Total customers */
-    totalCustomersEl.textContent =
-      formatNumber(customers.length);
-
-
-    /* Total revenue */
-    const totalRevenue = confirmedBookings.reduce(
-      function (total, booking) {
-        return total + Number(booking.totalAmount || 0);
-      },
-      0
-    );
-
-    totalRevenueEl.textContent =
-      formatCurrency(totalRevenue);
-
-
-    /* Sold tickets */
-    const soldTickets = confirmedBookings.reduce(
-      function (total, booking) {
-        const seats = Array.isArray(booking.seats)
-          ? booking.seats.length
-          : 0;
-
-        return total + seats;
-      },
-      0
-    );
-
-    soldTicketsEl.textContent =
-      formatNumber(soldTickets);
-
-
-    /* Available seats */
-    const availableSeats = events.reduce(
-      function (total, event) {
-        return total + getAvailableSeatsCount(event);
-      },
-      0
-    );
-
-    availableSeatsEl.textContent =
-      formatNumber(availableSeats);
-
-
-    /* Cancelled bookings */
-    cancelledBookingsEl.textContent =
-      formatNumber(cancelledBookings.length);
-  }
-
-
-  /* =====================================================
-     RECENT BOOKINGS
-     ====================================================== */
-
-  function renderRecentBookings() {
-    const bookings = getBookings();
-    const events = getEvents();
-
-    if (bookings.length === 0) {
-      recentBookingsBody.innerHTML = `
-        <tr>
-          <td colspan="5">
-            <div class="dashboard-empty dashboard-empty-large">
-              <div class="empty-icon">▤</div>
-              <strong>No bookings yet</strong>
-              <span>
-                Booking records will appear here once customers
-                make bookings.
-              </span>
-            </div>
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-
-    const recentBookings = bookings
-      .slice()
-      .sort(function (a, b) {
-        return new Date(b.bookingDate) -
-          new Date(a.bookingDate);
-      })
-      .slice(0, 5);
-
-
-    recentBookingsBody.innerHTML =
-      recentBookings.map(function (booking) {
-        return createBookingRow(booking, events);
-      }).join("");
-  }
-
-
-  function createBookingRow(booking, events) {
-    const bookingId =
-      booking.id || "—";
-
-    const customerName =
-      booking.fullName || "Unknown Customer";
-
-    const event =
-      events.find(function (item) {
-        return item.id === booking.eventId;
-      });
-
-    const eventName =
-      event ? event.name : "Unknown Event";
-
-    const amount =
-      Number(booking.totalAmount || 0);
-
-    const status =
-      booking.status || "Pending";
-
-    const statusClass =
-      getStatusClass(status);
-
-    const initials =
-      getInitials(customerName);
-
-
-    return `
-      <tr>
-
-        <td>
-          <span class="booking-id">
-            #${escapeHTML(bookingId)}
-          </span>
-        </td>
-
-        <td>
-          <div class="customer-cell">
-
-            <div class="customer-avatar">
-              ${escapeHTML(initials)}
-            </div>
-
-            <span>
-              ${escapeHTML(customerName)}
-            </span>
-
-          </div>
-        </td>
-
-        <td>
-          <span class="event-name">
-            ${escapeHTML(eventName)}
-          </span>
-        </td>
-
-        <td>
-          <strong>
-            ${escapeHTML(formatCurrency(amount))}
-          </strong>
-        </td>
-
-        <td>
-          <span class="status-badge ${statusClass}">
-            ${escapeHTML(status)}
-          </span>
-        </td>
-
-      </tr>
-    `;
-  }
-
-
-  /* =====================================================
-     EVENT OVERVIEW
-     ====================================================== */
-
-  function renderEventOverview() {
-    const events = getEvents();
-
-    if (events.length === 0) {
-      eventStatusList.innerHTML = `
-        <div class="dashboard-empty">
-          <strong>No events available</strong>
-          <span>
-            Add events from the Events section.
-          </span>
-        </div>
-      `;
-
-      return;
-    }
-
-
-    const statuses = [
-      {
-        name: "Upcoming",
-        className: "upcoming"
-      },
-      {
-        name: "Ongoing",
-        className: "ongoing"
-      },
-      {
-        name: "Completed",
-        className: "completed"
-      },
-      {
-        name: "Cancelled",
-        className: "cancelled"
-      }
-    ];
-
-
-    const totalEvents = events.length;
-
-
-    eventStatusList.innerHTML =
-      statuses.map(function (status) {
-
-        const count = events.filter(function (event) {
-          return event.status === status.name;
-        }).length;
-
-        const percentage =
-          totalEvents > 0
-            ? Math.round((count / totalEvents) * 100)
-            : 0;
-
-
-        return `
-          <div class="event-status-item">
-
-            <div class="event-status-top">
-
-              <div class="event-status-name">
-
-                <span
-                  class="event-status-dot ${status.className}"
-                ></span>
-
-                <span>
-                  ${status.name}
-                </span>
-
-              </div>
-
-              <strong>
-                ${count}
-              </strong>
-
-            </div>
-
-
-            <div class="event-progress">
-
-              <div
-                class="event-progress-bar ${status.className}"
-                style="width: ${percentage}%"
-              ></div>
-
-            </div>
-
-
-            <span class="event-percentage">
-              ${percentage}%
-            </span>
-
-          </div>
-        `;
-      }).join("");
-  }
-
-
-  /* =====================================================
-     ADMIN MOBILE NAVIGATION
-     ====================================================== */
-
-  function initAdminNavigation() {
-    if (!hamburger || !sidebar || !overlay) {
-      return;
-    }
-
-
-    hamburger.addEventListener("click", function () {
-      const isOpen =
-        sidebar.classList.contains("open");
-
-      if (isOpen) {
-        closeSidebar();
-      } else {
-        openSidebar();
-      }
-    });
-
-
-    overlay.addEventListener("click", closeSidebar);
-
-
-    document
-      .querySelectorAll(".admin-nav-link")
-      .forEach(function (link) {
-        link.addEventListener("click", closeSidebar);
-      });
-
-
-    window.addEventListener("resize", function () {
-      if (window.innerWidth > 900) {
-        closeSidebar();
-      }
-    });
-  }
-
-
-  function openSidebar() {
-    sidebar.classList.add("open");
-    overlay.classList.add("open");
-
-    hamburger.setAttribute(
-      "aria-expanded",
-      "true"
-    );
-
-    document.body.classList.add(
-      "admin-sidebar-open"
-    );
-  }
-
-
-  function closeSidebar() {
+  overlay.addEventListener("click", () => {
     sidebar.classList.remove("open");
     overlay.classList.remove("open");
+  });
+}
 
-    hamburger.setAttribute(
-      "aria-expanded",
-      "false"
-    );
+function computeStats() {
+  const events = getEvents();
+  const bookings = getBookings();
+  const customers = getCustomers();
 
-    document.body.classList.remove(
-      "admin-sidebar-open"
-    );
+  const activeBookings = bookings.filter(b => b.status !== "Cancelled");
+  const cancelledBookings = bookings.filter(b => b.status === "Cancelled");
+
+  const totalRevenue = activeBookings.reduce((sum, b) => sum + b.totalAmount, 0);
+  const soldTickets = activeBookings.reduce((sum, b) => sum + b.tickets, 0);
+  const availableSeats = events.reduce((sum, e) => sum + getAvailableSeatsCount(e), 0);
+
+  return {
+    totalEvents: events.length,
+    totalBookings: bookings.length,
+    totalCustomers: customers.length,
+    totalRevenue,
+    soldTickets,
+    availableSeats,
+    cancelledBookings: cancelledBookings.length
+  };
+}
+
+function statCardHTML(iconSvg, colorClass, value, label) {
+  return `
+    <div class="card stat-card">
+      <div class="stat-card-top">
+        <div class="stat-icon ${colorClass}">${iconSvg}</div>
+      </div>
+      <div class="stat-value">${value}</div>
+      <div class="stat-label">${label}</div>
+    </div>
+  `;
+}
+
+function renderStats() {
+  const s = computeStats();
+  const icons = {
+    events: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    bookings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2l1.5 4h9L18 2"/><path d="M3.5 6h17l-1.6 12.5a2 2 0 0 1-2 1.5H7.1a2 2 0 0 1-2-1.5L3.5 6z"/></svg>',
+    customers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>',
+    revenue: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    tickets: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8z"/></svg>',
+    seats: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 18v-4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"/><path d="M4 18h16v2H4z"/><path d="M6 12V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/></svg>',
+    cancelled: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>'
+  };
+
+  const cards = [
+    statCardHTML(icons.events, "blue", s.totalEvents, "Total Events"),
+    statCardHTML(icons.bookings, "green", s.totalBookings, "Total Bookings"),
+    statCardHTML(icons.customers, "cyan", s.totalCustomers, "Total Customers"),
+    statCardHTML(icons.revenue, "green", formatCurrency(s.totalRevenue), "Total Revenue"),
+    statCardHTML(icons.tickets, "blue", s.soldTickets, "Sold Tickets"),
+    statCardHTML(icons.seats, "orange", s.availableSeats, "Available Seats"),
+    statCardHTML(icons.cancelled, "red", s.cancelledBookings, "Cancelled Bookings")
+  ];
+
+  document.getElementById("statsGrid").innerHTML = cards.join("");
+}
+
+function bookingStatusClass(status) {
+  const map = { Confirmed: "badge-success", Pending: "badge-warning", Cancelled: "badge-danger", Completed: "badge-gray" };
+  return map[status] || "badge-gray";
+}
+
+function renderRecentBookings() {
+  const bookings = getBookings()
+    .slice()
+    .sort((a, b) => new Date(b.bookingDate) - new Date(a.bookingDate))
+    .slice(0, 5);
+
+  const body = document.getElementById("recentBookingsBody");
+
+  if (bookings.length === 0) {
+    body.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No bookings yet.</td></tr>`;
+    return;
   }
 
+  body.innerHTML = bookings
+    .map(b => {
+      const event = getEventById(b.eventId);
+      return `
+        <tr>
+          <td>#${b.id}</td>
+          <td>${b.fullName}</td>
+          <td>${event ? event.name : "(deleted)"}</td>
+          <td>${formatCurrency(b.totalAmount)}</td>
+          <td><span class="badge ${bookingStatusClass(b.status)}">${b.status}</span></td>
+        </tr>
+      `;
+    })
+    .join("");
+}
 
-  /* =====================================================
-     CURRENT DATE
-     ====================================================== */
-
-  function renderCurrentDate() {
-    const now = new Date();
-
-    dashboardDate.textContent =
-      now.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      });
-  }
-
-
-  /* =====================================================
-     STATUS HELPERS
-     ====================================================== */
-
-  function getStatusClass(status) {
-    switch (status) {
-      case "Confirmed":
-        return "confirmed";
-
-      case "Cancelled":
-        return "cancelled";
-
-      case "Completed":
-        return "completed";
-
-      case "Ongoing":
-        return "ongoing";
-
-      case "Upcoming":
-        return "upcoming";
-
-      default:
-        return "pending";
-    }
-  }
-
-
-  /* =====================================================
-     NUMBER HELPERS
-     ====================================================== */
-
-  function formatNumber(number) {
-    return Number(number || 0).toLocaleString("en-US");
-  }
-
-
-  /* =====================================================
-     TEXT HELPERS
-     ====================================================== */
-
-  function getInitials(name) {
-    const words =
-      String(name)
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
-
-
-    if (words.length === 0) {
-      return "CU";
-    }
-
-
-    if (words.length === 1) {
-      return words[0]
-        .substring(0, 2)
-        .toUpperCase();
-    }
-
-
-    return (
-      words[0].charAt(0) +
-      words[words.length - 1].charAt(0)
-    ).toUpperCase();
-  }
-
-
-  function escapeHTML(value) {
-    return String(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
-
-})();
+document.addEventListener("DOMContentLoaded", () => {
+  initEventsData();
+  initAdminSidebar();
+  renderStats();
+  renderRecentBookings();
+});
