@@ -397,6 +397,8 @@ tbody tr:last-child td { border-bottom: none; }
 @media (max-width: 1100px) {
   .events-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+   .details-grid { grid-template-columns: 1fr !important; }
+  .booking-grid { grid-template-columns: 1fr !important; }
 }
 
 @media (max-width: 900px) {
