@@ -1,5 +1,5 @@
 /* =========================================================
-   THEME (LIGHT/DARK MODE) + KEYBOARD SHORTCUTS
+   THEME (LIGHT/DARK MODE) + KEYBOARD SHORTCUTS + MOBILE NAV
    Loaded after data.js and ui.js on every page.
    ========================================================= */
 
@@ -31,6 +31,8 @@ function initThemeToggleButtons() {
     btn.addEventListener("click", toggleTheme);
   });
 }
+
+/* ---------- MOBILE NAV TOGGLE ---------- */
 function initMobileNav() {
   const toggle = document.getElementById("navMenuToggle");
   const links = document.getElementById("navLinks");
@@ -45,7 +47,6 @@ function initKeyboardShortcuts() {
   document.addEventListener("keydown", (e) => {
     const key = e.key.toLowerCase();
 
-    // Ctrl/Cmd + K -> focus the page search box
     if ((e.ctrlKey || e.metaKey) && key === "k") {
       const searchInput = document.querySelector(".nav-search input, .filters-bar input[type='text']");
       if (searchInput) {
@@ -54,7 +55,6 @@ function initKeyboardShortcuts() {
       }
     }
 
-    // Esc -> close any open modal
     if (e.key === "Escape") {
       const overlay = document.getElementById("modalOverlay");
       if (overlay && overlay.classList.contains("open")) {
@@ -62,7 +62,6 @@ function initKeyboardShortcuts() {
       }
     }
 
-    // Ctrl/Cmd + D -> toggle dark mode
     if ((e.ctrlKey || e.metaKey) && key === "d") {
       e.preventDefault();
       toggleTheme();
