@@ -20,24 +20,22 @@ function initAdminSidebar() {
   });
 }
 
-/* ---------- PROFILE ---------- */
+/* ---------- ADMIN PROFILE ---------- */
 function loadProfile() {
   try {
-    const raw = localStorage.getItem(ADMIN_PROFILE_KEY);
-    return raw ? JSON.parse(raw) : { name: "Admin User", email: "admin@eventify.com" };
+    const saved = JSON.parse(localStorage.getItem(ADMIN_PROFILE_KEY));
+    if (saved) {
+      document.getElementById("adminName").value = saved.name;
+      document.getElementById("adminEmail").value = saved.email;
+    }
   } catch (e) {
-    return { name: "Admin User", email: "admin@eventify.com" };
+    /* keep defaults */
   }
 }
 
-function renderProfile() {
-  const profile = loadProfile();
-  document.getElementById("adminName").value = profile.name;
-  document.getElementById("adminEmail").value = profile.email;
-}
-
-function initProfileSave() {
-  document.getElementById("saveProfileBtn").addEventListener("click", () => {
+function initProfileForm() {
+  document.getElementById("profileForm").addEventListener("submit", (e) => {
+    e.preventDefault();
     const name = document.getElementById("adminName").value.trim();
     const email = document.getElementById("adminEmail").value.trim();
 
@@ -52,15 +50,16 @@ function initProfileSave() {
 }
 
 /* ---------- APPEARANCE ---------- */
-function renderThemeLabel() {
-  document.getElementById("currentThemeLabel").textContent = getSavedTheme() === "dark" ? "Dark" : "Light";
+function updateThemeLabel() {
+  const label = document.getElementById("currentThemeLabel");
+  label.textContent = getSavedTheme() === "dark" ? "Dark" : "Light";
 }
 
-function initThemeSection() {
-  renderThemeLabel();
+function initThemeControls() {
+  updateThemeLabel();
   document.getElementById("toggleThemeBtn").addEventListener("click", () => {
     toggleTheme();
-    renderThemeLabel();
+    updateThemeLabel();
   });
 }
 
@@ -69,7 +68,7 @@ function initResetData() {
   document.getElementById("resetDataBtn").addEventListener("click", () => {
     showConfirm({
       title: "Reset all data?",
-      message: "This will delete all events, bookings, and customers, and restore the original demo events. This cannot be undone.",
+      message: "All events, bookings, and customers will be permanently deleted and replaced with the original demo data.",
       confirmText: "Yes, Reset Everything",
       cancelText: "Cancel",
       danger: true,
@@ -88,8 +87,8 @@ function initResetData() {
 document.addEventListener("DOMContentLoaded", () => {
   initEventsData();
   initAdminSidebar();
-  renderProfile();
-  initProfileSave();
-  initThemeSection();
+  loadProfile();
+  initProfileForm();
+  initThemeControls();
   initResetData();
 });
