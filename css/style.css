@@ -282,7 +282,7 @@ tbody tr:last-child td { border-bottom: none; }
   height: 6px; background: linear-gradient(90deg, transparent, var(--primary), transparent);
   border-radius: 50%; margin: 0 auto 6px; max-width: 70%; opacity: 0.6;
 }
-.seat-map { display: flex; flex-direction: column; gap: 8px; align-items: center; min-width: 420px; }
+.seat-map { display: flex; flex-direction: column; gap: 8px; align-items: center; width: fit-content; margin: 0 auto; }
 .seat-row { display: flex; align-items: center; gap: 8px; }
 .seat-row-label { width: 20px; font-size: 12px; font-weight: 700; color: var(--text-muted); text-align: center; }
 .seat {
